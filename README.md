@@ -179,11 +179,11 @@ n8nio/n8n:latest # we call the latest stable version
 By leveraging Docker volumes, you ensure that your n8n instance remains resilient and your data secure through updates or container changes.
 
 
-🛠️ Important: Version 1.91.1+ Auth and Proxy Changes
+## 🛠️ Important: Version 1.91.1+ Auth and Proxy Changes
 
 Starting from version 1.91.1 (possibly as early as 1.81.2), new security and proxy features were introduced. These changes may block access if your environment isn't correctly configured.
 
-🔒 Why Environment Variables Matter in n8n v1.91.1
+## 🔒 Why Environment Variables Matter in n8n v1.91.1
 Starting from version 1.91.1, n8n has implemented stricter security measures and proxy handling. This includes:
 
 Enhanced Security Features: n8n now enforces stricter authentication protocols, which may require explicit configuration of authentication-related environment variables.
@@ -202,7 +202,7 @@ Improved Security: Sensitive information, such as authentication credentials, ca
 
 Ease of Updates: Modifying configurations becomes straightforward, reducing the risk of errors during updates or migrations.
 
-If you're upgrading and encounter login issues (e.g., invalid password), follow these steps:
+## If you're upgrading and encounter login issues (e.g., invalid password), follow these steps:
 
 1. Inspect Current Env Variables
 
