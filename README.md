@@ -178,3 +178,86 @@ n8nio/n8n:latest # we call the latest stable version
 
 By leveraging Docker volumes, you ensure that your n8n instance remains resilient and your data secure through updates or container changes.
 
+
+🛠️ Important: Version 1.91.1+ Auth and Proxy Changes
+
+Starting from version 1.91.1 (possibly as early as 1.81.2), new security and proxy features were introduced. These changes may block access if your environment isn't correctly configured.
+
+🔒 Why Environment Variables Matter in n8n v1.91.1
+Starting from version 1.91.1, n8n has implemented stricter security measures and proxy handling. This includes:
+
+Enhanced Security Features: n8n now enforces stricter authentication protocols, which may require explicit configuration of authentication-related environment variables.
+
+Proxy Configuration: Changes in how n8n handles proxies necessitate the explicit setting of certain environment variables to ensure proper routing and accessibility.
+
+These updates mean that relying on default settings or previous configurations may lead to issues such as inaccessible instances or authentication errors.
+
+🛠️ Transitioning to an .env File
+To accommodate these changes and maintain a stable n8n environment, it's recommended to manage your configuration through an .env file. This approach offers:
+n8n Documentation
+
+Centralized Configuration: All environment variables are stored in a single, manageable file.
+
+Improved Security: Sensitive information, such as authentication credentials, can be handled more securely.
+
+Ease of Updates: Modifying configurations becomes straightforward, reducing the risk of errors during updates or migrations.
+
+If you're upgrading and encounter login issues (e.g., invalid password), follow these steps:
+
+1. Inspect Current Env Variables
+
+
+```bash
+docker inspect n8n > n8n-config.json
+docker inspect n8n | jq '.[0].Config.Env'
+```
+
+2. Debug Container Logs
+
+```bash
+docker logs -f n8n
+```
+
+3. Create an Environment File
+
+```bash
+nano n8n.env
+```
+
+Paste the following:
+
+```bash
+N8N_HOST=your-domain.com
+N8N_PROTOCOL=https
+N8N_PORT=5678
+WEBHOOK_URL=https://your-domain.com/
+WEBHOOK_TUNNEL_URL=https://your-domain.com/
+
+N8N_TRUST_PROXY=true
+N8N_LOG_LEVEL=info
+N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+N8N_RUNNERS_ENABLED=true
+
+N8N_BASIC_AUTH_ACTIVE=true
+N8N_BASIC_AUTH_USER=your-user-or-email
+N8N_BASIC_AUTH_PASSWORD=your-password
+```
+
+⚠️ Make sure there are no leading/trailing spaces. Each line must start at the beginning.
+
+4. Re-run n8n with the .env file
+
+```bash
+docker stop n8n && docker rm n8n
+
+docker run -d \
+--restart unless-stopped \
+--name n8n \
+-p 5678:5678 \
+--env-file n8n.env \
+-v n8n_data:/home/node/.n8n \
+n8nio/n8n:1.91.1
+```
+
+
+
